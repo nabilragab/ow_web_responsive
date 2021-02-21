@@ -11,12 +11,12 @@ odoo.define("web_responsive.Discuss", function (require) {
     }
 
     const core = require("web.core");
-    const Discuss = require("mail/static/src/widgets/discuss/discuss.js");
+    const Discuss = require("mail.Discuss");
 
     const QWeb = core.qweb;
 
     Discuss.include({
-        contentTemplate: "KanbanView.MobileTabs",
+        contentTemplate: "mail.discuss_mobile",
         events: Object.assign({}, Discuss.prototype.events, {
             "click .o_mail_mobile_tab": "_onClickMobileTab",
             "click .o_mailbox_inbox_item": "_onClickMobileMailboxItem",
@@ -177,7 +177,7 @@ odoo.define("web_responsive.Discuss", function (require) {
                 });
                 def = this.call("mail_service", "getChannelPreviews", channels);
             }
-            return def.then((previews) => {
+            return def.then(previews => {
                 // Update content
                 if (inMailbox) {
                     if (!previouslyInInbox) {
@@ -204,6 +204,10 @@ odoo.define("web_responsive.Discuss", function (require) {
 
                 // Update control panel
                 this.$buttons.find("button").removeClass("d-block").addClass("d-none");
+                this.$buttons
+                    .find("button")
+                    .removeClass("d-block")
+                    .addClass("d-none");
                 this.$buttons
                     .find(".o_mail_discuss_button_" + type)
                     .removeClass("d-none")
@@ -253,7 +257,10 @@ odoo.define("web_responsive.Discuss", function (require) {
          * @private
          */
         _onAddThread: function () {
-            this.$(".o_mail_add_thread").show().find("input").focus();
+            this.$(".o_mail_add_thread")
+                .show()
+                .find("input")
+                .focus();
         },
         /**
          * Switches to the clicked thread in the Inbox page (Inbox or Starred).
